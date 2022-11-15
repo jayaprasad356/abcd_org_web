@@ -14,10 +14,10 @@
  	header("Content-Type: text/html;charset=UTF-8");
  	
 		 
-            DEFINE ('DB_USER', 'u893061261_abcdAshok');
-            DEFINE ('DB_PASSWORD', 'King@#5178');
+            DEFINE ('DB_USER', 'u743445510_abcd_org');
+            DEFINE ('DB_PASSWORD', 'Abcd@2022');
             DEFINE ('DB_HOST', 'localhost'); //host name depends on server
-            DEFINE ('DB_NAME', 'u893061261_abcdAshok');
+            DEFINE ('DB_NAME', 'u743445510_abcd_org');
 	
 	
 

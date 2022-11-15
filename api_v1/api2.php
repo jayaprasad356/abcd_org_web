@@ -1,11 +1,11 @@
 <?php
 
- //include("../includes/connection.php");
+ include("../includes/connection.php");
  include("../includes/function.php");
 
 date_default_timezone_set("Asia/Calcutta");
     $dated=date("d-m-Y");
-  $dated1=$date;
+  // $dated1=$date;
   $date=time();
    $date1=time();
    //print_r('hello');exit;
@@ -747,7 +747,40 @@ else if(isset($_GET['gen_code']))
  }
  
 }
+else if(isset($_GET['import_excel']))
+{
 
+    $query = "SELECT * FROM `excel_text` LIMIT 100000 ";
+   $response = mysqli_query($mysqli, $query);
+
+    $result = array();
+
+
+    if( mysqli_num_rows($response) > 0 ) {
+      $rows = array();
+      while($r = mysqli_fetch_assoc($response)) {
+          $rows[] = $r;
+      }
+      $set['abcdapp']=array('message' =>' Import Found','title'=>'hello','success'=>'1','Results' =>$rows);
+
+      $result["data"] = $rows;
+      
+      
+      echo json_encode($set);
+      
+
+  
+ 
+  }else {
+ 
+     $result["success"] = "0";
+     $result["message"] = "Error!";
+     echo json_encode($result);
+ 
+     mysqli_close($mysqli);
+ }
+ 
+}
 else if(isset($_GET['device_login']))
 {
 
@@ -1195,7 +1228,68 @@ else{
 
 
 }
+else if(isset($_GET['insert_bulk_wallet']))
 
+  {
+    date_default_timezone_set("Asia/Calcutta");
+      
+    $mobile = $_POST['user_id'];
+    $name = $_POST['name'];
+    $uid = $_GET['uid'];
+    $qrId=$_GET['qrId'];
+    $amount=PER_QRCOIN;
+    $codes=$_POST['codes'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $city = $_POST['city'];
+    $profile_pic = $_POST['profile_pic'];
+    $txn_type=$_POST['txn_type'];
+    $status=$_POST['txn_status'];
+    $amount = $amount * $codes;
+    $date=$date;
+
+                //   print_r($user_qry5178);exit;
+          $sql = " UPDATE `USER_DETAILS` SET `wallet` = wallet+$amount ,`total_all_qr_generation` =
+                total_all_qr_generation + $codes,`todaysCodes` = todaysCodes + $codes, `correct_qr_generation`= correct_qr_generation + $codes,`active_date`=$date WHERE `mobile` = $mobile";
+
+
+
+    
+   $sql = "INSERT INTO `WALLET` (`ID`, `username`,`user_id`, `mobile`, `amount`, `status`, `txn`,`qrId`, `date`) VALUES (NULL, '$name','$user_id', '$mobile', '$amount', '$status', '$txn_type', '$qrId','$date')";
+
+    if(mysqli_query($mysqli, $sql)) {
+
+        /*  $result["success"] = "1";
+          $result["message"] = "success";
+*/
+          $set['abcdapp'] =array('success'=>'1','title'=>'done','message'=>'hello','status'=>1,'Results' =>'');
+
+        /*  echo json_encode($result);
+          mysqli_close($mysqli);*/
+          
+      }
+  
+
+else{
+
+  /* $result["success"] = "0";
+   $result["message"] = $sql;
+   echo json_encode($result);
+
+   mysqli_close($mysqli);*/
+
+   $set['abcdapp'] =array('success'=>'0','title'=>'done','message'=>'hello','status'=>1,'Results' =>$finaldata);
+}
+
+   
+
+
+    header( 'mysqlitent-Type: application/json; charset=utf-8' );
+    echo $val= str_replace('\\/', '/', json_encode($set,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    die();
+
+
+}
 else if(isset($_GET['user_status']))
 {
     $user_id = $_GET['user_id'];
